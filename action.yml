@@ -1,5 +1,5 @@
 name: 'Fix Bot Contributor'
-description: 'Rewrites commits authored by a bot identity (e.g. github-actions[bot]) to a real git identity, then force-pushes - use this to remove an accidentally-added bot from your repo Contributors graph.'
+description: 'Rewrites commits authored by a bot identity from your repo Contributors graph.'
 author: 'MPHONlC'
 branding:
   icon: 'user-check'
