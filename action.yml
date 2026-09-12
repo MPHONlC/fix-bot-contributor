@@ -59,7 +59,7 @@ runs:
         git remote add origin "https://x-access-token:${TOKEN}@github.com/${REPO}.git"
         git fetch origin --prune --tags
         git push --force-with-lease origin --all
-        git push --force-with-lease origin --tags
+        git push --force origin --tags
 
     - name: Annotate success
       if: success()
