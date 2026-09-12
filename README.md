@@ -45,7 +45,7 @@ jobs:
         with:
           fetch-depth: 0
 
-      - uses: MPHONlC/fix-bot-contributor-action@v1
+      - uses: MPHONlC/fix-bot-contributor@Version-0.0.1
         with:
           confirm: ${{ inputs.confirm }}
           new_name: ${{ inputs.new_name }}
