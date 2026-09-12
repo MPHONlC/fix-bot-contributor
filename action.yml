@@ -57,6 +57,7 @@ runs:
         REPO: ${{ github.repository }}
       run: |
         git remote add origin "https://x-access-token:${TOKEN}@github.com/${REPO}.git"
+        git fetch origin --prune --tags
         git push --force-with-lease origin --all
         git push --force-with-lease origin --tags
 
@@ -68,4 +69,5 @@ runs:
     - name: Annotate failure
       if: failure()
       shell: bash
-      run: echo "::error title=History Rewrite Failed::Check the step logs above. If the branch has protection rules blocking force-pushes, temporarily disable that, re-run, then re-enable it."
+      run: |
+        echo "::error title=History Rewrite Failed::Check the step logs above. Most likely cause - repo Settings, Actions, General, Workflow permissions is set to read-only: switch it to 'Read and write permissions' and re-run. Less commonly, a branch protection rule blocking force-pushes on this branch."
