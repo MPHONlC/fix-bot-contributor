@@ -1,0 +1,71 @@
+name: 'Fix Bot Contributor'
+description: 'Rewrites commits authored by a bot identity (e.g. github-actions[bot]) to a real git identity, then force-pushes - use this to remove an accidentally-added bot from your repo Contributors graph.'
+author: 'MPHONlC'
+branding:
+  icon: 'user-check'
+  color: 'orange'
+
+inputs:
+  confirm:
+    description: "Must be exactly 'REWRITE' to proceed. Safety gate against accidental runs - this rewrites all history and force-pushes."
+    required: true
+  new_name:
+    description: 'Git author/committer name to rewrite the matched commits to'
+    required: true
+  new_email:
+    description: 'Git author/committer email to rewrite the matched commits to'
+    required: true
+  bot_login:
+    description: "The bot identity's commit author/committer email to rewrite"
+    required: false
+    default: '41898282+github-actions[bot]@users.noreply.github.com'
+  github_token:
+    description: 'Token with contents:write permission, used to force-push the rewritten history back to the calling repo'
+    required: true
+
+runs:
+  using: 'composite'
+  steps:
+    - name: Check confirmation
+      shell: bash
+      run: |
+        if [ "${{ inputs.confirm }}" != "REWRITE" ]; then
+          echo "::error title=Aborted::Type REWRITE to confirm - nothing was changed."
+          exit 1
+        fi
+
+    - name: Install git-filter-repo
+      shell: bash
+      run: pip install --quiet git-filter-repo
+
+    - name: Rewrite matching commits to the real identity
+      shell: bash
+      run: |
+        git filter-repo --force --commit-callback "
+        if commit.author_email == b'${{ inputs.bot_login }}':
+            commit.author_name = b'${{ inputs.new_name }}'
+            commit.author_email = b'${{ inputs.new_email }}'
+        if commit.committer_email == b'${{ inputs.bot_login }}':
+            commit.committer_name = b'${{ inputs.new_name }}'
+            commit.committer_email = b'${{ inputs.new_email }}'
+        "
+
+    - name: Push rewritten history
+      shell: bash
+      env:
+        TOKEN: ${{ inputs.github_token }}
+        REPO: ${{ github.repository }}
+      run: |
+        git remote add origin "https://x-access-token:${TOKEN}@github.com/${REPO}.git"
+        git push --force-with-lease origin --all
+        git push --force-with-lease origin --tags
+
+    - name: Annotate success
+      if: success()
+      shell: bash
+      run: echo "::notice title=History Rewrite Complete::Rewrote bot commits to ${{ inputs.new_name }} and force-pushed. The Contributors graph updates in a few minutes."
+
+    - name: Annotate failure
+      if: failure()
+      shell: bash
+      run: echo "::error title=History Rewrite Failed::Check the step logs above. If the branch has protection rules blocking force-pushes, temporarily disable that, re-run, then re-enable it."
