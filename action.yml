@@ -7,7 +7,7 @@ branding:
 
 inputs:
   confirm:
-    description: "Must be exactly 'REWRITE' to proceed. Safety gate against accidental runs - this rewrites all history and force-pushes."
+    description: "Must be exactly 'REWRITE' to proceed"
     required: true
   new_name:
     description: 'Git author/committer name to rewrite the matched commits to'
