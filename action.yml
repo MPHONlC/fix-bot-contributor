@@ -18,7 +18,7 @@ inputs:
   bot_login:
     description: "The bot identity's commit author/committer email to rewrite"
     required: false
-    default: '41898282+github-actions[bot]@users.noreply.github.com'
+    default: 'github-actions[bot]@users.noreply.github.com'
   github_token:
     description: 'Token with contents:write permission, used to force-push the rewritten history back to the calling repo'
     required: true
