@@ -61,7 +61,7 @@ Trigger it manually from the Actions tab, type `REWRITE` into the confirmation f
 | `confirm` | Yes | - | Must be exactly `REWRITE` or the action aborts without changing anything. |
 | `new_name` | Yes | - | The real git name to rewrite matching commits to. |
 | `new_email` | Yes | - | The real git email to rewrite matching commits to. |
-| `bot_login` | No | `41898282+github-actions[bot]@users.noreply.github.com` | The bot identity's commit author/committer email to match against. |
+| `bot_login` | No | `github-actions[bot]@users.noreply.github.com` | The bot identity's commit author/committer email to match against. |
 | `github_token` | Yes | - | A token with `contents: write` on the target repo, used to force-push. `secrets.GITHUB_TOKEN` is sufficient for same-repo use. |
 
 ## Requirements
