@@ -49,10 +49,14 @@ jobs:
           confirm: ${{ inputs.confirm }}
           new_name: ${{ inputs.new_name }}
           new_email: ${{ inputs.new_email }}
+          bot_login: 'github-actions[bot]@users.noreply.github.com'
           github_token: ${{ secrets.GITHUB_TOKEN }}
 ```
 
-Trigger it manually from the Actions tab, type `REWRITE` into the confirmation field, and fill in your real name/email. Leave `bot_login` unset unless the bot you're removing uses a different commit email than the standard `github-actions[bot]` one.
+Trigger it manually from the Actions tab, type `REWRITE` into the confirmation field, and fill in your real name/email plus the bot's exact commit email.
+
+> [!TIP]
+> GitHub's own bot commits are usually authored under a numeric-ID-prefixed address, shaped like `<numeric-ID>github-actions[bot]@users.noreply.github.com` - check the actual commit (`git log --format='%ae %ce'`) rather than guessing, since a mismatched `bot_login` silently matches zero commits.
 
 ## Inputs
 
@@ -61,7 +65,7 @@ Trigger it manually from the Actions tab, type `REWRITE` into the confirmation f
 | `confirm` | Yes | - | Must be exactly `REWRITE` or the action aborts without changing anything. |
 | `new_name` | Yes | - | The real git name to rewrite matching commits to. |
 | `new_email` | Yes | - | The real git email to rewrite matching commits to. |
-| `bot_login` | No | `github-actions[bot]@users.noreply.github.com` | The bot identity's commit author/committer email to match against. |
+| `bot_login` | Yes | - | The bot identity's exact commit author/committer email to match against. |
 | `github_token` | Yes | - | A token with `contents: write` on the target repo, used to force-push. `secrets.GITHUB_TOKEN` is sufficient for same-repo use. |
 
 ## Requirements
