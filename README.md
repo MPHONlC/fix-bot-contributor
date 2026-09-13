@@ -2,15 +2,14 @@
 
 A GitHub Action that rewrites commits authored by a bot identity (like `github-actions[bot]`) to your own real git identity, then force-pushes the result. Use this if an automated commit accidentally added a bot as a "Contributor" on your repo and you want it gone.
 
-## ⚠️ Before you use this
-
-This action **rewrites git history and force-pushes**. That is destructive:
-
-- Every commit SHA from the first rewritten commit onward changes.
-- Anyone else with a clone, fork, or open pull request against this repo will need to re-clone or hard-reset - their existing copies will no longer match.
-- There is no built-in undo. The old history is only recoverable via the reflog/GitHub's internal retention for a limited time, and only by someone with direct repo access.
-
-Only use this on repos where you understand and accept that cost - typically a solo or small personal project, not a repo with active outside collaborators or forks you care about staying in sync.
+> [!CAUTION]
+> This action **rewrites git history and force-pushes**. That is destructive:
+>
+> - Every commit SHA from the first rewritten commit onward changes.
+> - Anyone else with a clone, fork, or open pull request against this repo will need to re-clone or hard-reset - their existing copies will no longer match.
+> - There is no built-in undo. The old history is only recoverable via the reflog/GitHub's internal retention for a limited time, and only by someone with direct repo access.
+>
+> Only use this on repos where you understand and accept that cost - typically a solo or small personal project, not a repo with active outside collaborators or forks you care about staying in sync.
 
 ## Usage
 
